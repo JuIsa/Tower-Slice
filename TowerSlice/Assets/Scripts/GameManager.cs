@@ -5,7 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    public GameObject prefab;
+    public GameObject prefabX;
+    public GameObject prefabZ;
     public Transform spawnx;
     public Transform spawnz;
     public static Transform _previous;
@@ -41,7 +42,7 @@ public class GameManager : MonoBehaviour
         if (isAxisX) {
             Vector3 coord = new Vector3(spawnx.position.x, y, 0);
             
-            _current =  Instantiate(prefab, coord, Quaternion.identity);
+            _current =  Instantiate(prefabX, coord, Quaternion.identity);
             
             //               _current.transform.position = Vector3.Lerp(coord, new Vector3(-4, y, 0), 0.2f);
             isAxisX = false;
@@ -49,19 +50,11 @@ public class GameManager : MonoBehaviour
         }
         else {
             Vector3 coord = new Vector3(0, y, spawnz.position.z);
-            _current = Instantiate(prefab, coord, Quaternion.identity);
+            _current = Instantiate(prefabZ, coord, Quaternion.identity);
             //_current.transform.position = Vector3.Lerp(_current.transform.position, new Vector3(0, y, -4), 0.1f);
             isAxisX = true;
         }
-        if (first) {
-            _temp = _current.transform;
-            first = false;
-        }
-        else {
-            _previous = _temp;
-            _temp = _current.transform;
-           
-        }
+        
         y += 0.2f;
     }
 
@@ -69,8 +62,8 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSeconds(1f);
         Vector3 coord = new Vector3(spawnx.position.x, y, 0);
-        Quaternion rot = Quaternion.Euler(0, -90f, 0);
-        Instantiate(prefab, coord, rot);
+        Quaternion rot = Quaternion.Euler(0, 0, 0);
+        Instantiate(prefabX, coord, rot);
         //               _current.transform.position = Vector3.Lerp(coord, new Vector3(-4, y, 0), 0.2f);
         isAxisX = false;
         y += 0.2f;
