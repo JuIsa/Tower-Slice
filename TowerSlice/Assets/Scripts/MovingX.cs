@@ -12,6 +12,12 @@ public class MovingX : MonoBehaviour
         GameObject go = GameObject.Find("Manager");
         GameManager event2 = go.GetComponent<GameManager>();
         event2.onSPressed += OnXCalled;
+
+        GameObject prev = event2.getPrevious();
+        float xscale = prev.transform.localScale.x;
+        float zscale = prev.transform.localScale.z;
+        transform.localScale = new Vector3(xscale, 0.2f, zscale);
+        transform.position = new Vector3(transform.position.x, transform.position.y, prev.transform.position.z);
     }
 
     public void OnXCalled() {
@@ -22,8 +28,9 @@ public class MovingX : MonoBehaviour
         float newx = transform.position.x / 2;
         
         float xscale = 4 - Math.Abs(transform.position.x);
-        transform.position = new Vector3(newx, transform.position.y, 0);
-        transform.localScale = new Vector3(xscale, 0.2f, 4f);
+
+        transform.position = new Vector3(newx, transform.position.y, transform.position.z);
+        transform.localScale = new Vector3(xscale, 0.2f, transform.localScale.z);
 
             
         

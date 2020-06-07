@@ -5,15 +5,22 @@ using UnityEngine.Assertions.Must;
 
 public class GameManager : MonoBehaviour
 {
-
+    [Header("Prefs")]
     public GameObject prefabX;
     public GameObject prefabZ;
     public Transform spawnx;
     public Transform spawnz;
-    public static Transform _previous;
+    public GameObject _previous;
     public GameObject background;
-    public Color _color;
-    
+    [Header("Colors")]
+    public Color _color1;
+    public Color _color2;
+    public Color _color3;
+    public Color _color4;
+    public Color _color5;
+    public Color _color6;
+    public Color _color7;
+    public Color[] _colors;
     private Transform _temp;
     private GameObject _current;
    
@@ -21,6 +28,7 @@ public class GameManager : MonoBehaviour
     private float y;
     private bool first = true;
     private float colorSpeed = 0.1f;
+    private int counter = 0;
 
     private Gradient _gradientC;
 
@@ -34,8 +42,8 @@ public class GameManager : MonoBehaviour
         y = spawnx.position.y;
         GameManager event2 = GetComponent<GameManager>();
         event2.onSPressed += spwn;
-        GenerateGradualColors();
-        _previous = GameObject.Find("Base").transform;
+        GenerateGradualColorsFromPublic();
+        _previous = GameObject.Find("Base");
         mr = background.GetComponent<MeshRenderer>();
     }
 
@@ -49,15 +57,16 @@ public class GameManager : MonoBehaviour
     }
 
     public void spwn() {
+        _previous = _current;
         if (isAxisX) {
             Vector3 coord = new Vector3(spawnx.position.x, y, 0);
             
             _current =  Instantiate(prefabX, coord, Quaternion.identity);
             MeshRenderer m = _current.GetComponent<MeshRenderer>();
-            
+     
             m.material.color = _gradientC.Evaluate(y * colorSpeed);
-            _color = _gradientC.Evaluate(y * colorSpeed);
-            Debug.Log(_color);
+            _color1 = _gradientC.Evaluate(y * colorSpeed);
+           // Debug.Log(_color1);
             //               _current.transform.position = Vector3.Lerp(coord, new Vector3(-4, y, 0), 0.2f);
             isAxisX = false;
            // mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
@@ -70,12 +79,16 @@ public class GameManager : MonoBehaviour
             MeshRenderer m = _current.GetComponent<MeshRenderer>();
            
             m.material.color = _gradientC.Evaluate(y * colorSpeed);
-            _color = _gradientC.Evaluate(y * colorSpeed);
-            Debug.Log(_color);
+            _color1 = _gradientC.Evaluate(y * colorSpeed);
+            //Debug.Log(_color1);
             //_current.transform.position = Vector3.Lerp(_current.transform.position, new Vector3(0, y, -4), 0.1f);
             isAxisX = true;
             //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
         }
+
+        _current.name = "Cube" + counter;
+        counter++;
+
         
         y += 0.2f;
     }
@@ -87,13 +100,17 @@ public class GameManager : MonoBehaviour
         Quaternion rot = Quaternion.Euler(0, 0, 0);
         _current = Instantiate(prefabX, coord, rot);
         MeshRenderer m = _current.GetComponent<MeshRenderer>();
-
+        _current.name = "Cube"+counter;
+        counter++;
         m.material.color = _gradientC.Evaluate(y * colorSpeed);
-        _color = _gradientC.Evaluate(y * colorSpeed);
-        //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
-        //               
+        _color1 = _gradientC.Evaluate(y * colorSpeed);
+        //Color of background
+        //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);               
         isAxisX = false;
         y += 0.2f;
+
+        //change previous cube
+
 
     }
     
@@ -147,5 +164,30 @@ public class GameManager : MonoBehaviour
         _gradientC.SetKeys(colors, alphas);
 
 
+    }
+
+    private void GenerateGradualColorsFromPublic() {
+        _gradientC = new Gradient();
+        int size = _colors.Length;
+        GradientColorKey[] colors = new GradientColorKey[size];
+        GradientAlphaKey[] alphas = new GradientAlphaKey[size];
+        for(int i = 0; i < size; i++) {
+            Debug.Log(_colors[i]);
+            colors[i].color = _colors[i];
+            colors[i].time = (float)i / (float)size;
+            alphas[i].alpha = 1;
+            alphas[i].time = (float)i / (float)size;
+            if (i == size - 1) {
+                colors[i].color = _colors[i];
+                colors[i].time = 1;
+                alphas[i].alpha = 1;
+                alphas[i].time = 1;
+            }
+        }
+        _gradientC.SetKeys(colors, alphas);
+    }
+
+    public GameObject getPrevious() {
+        return _previous;
     }
 }

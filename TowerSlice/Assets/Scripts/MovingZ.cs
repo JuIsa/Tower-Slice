@@ -12,21 +12,31 @@ public class MovingZ : MonoBehaviour {
         GameObject go = GameObject.Find("Manager");
         GameManager event2 = go.GetComponent<GameManager>();
         event2.onSPressed += OnZCalled;
+       
+        GameObject prev = event2.getPrevious();
+        float xscale = prev.transform.localScale.x;
+        float zscale = prev.transform.localScale.z;
+        transform.localScale = new Vector3(xscale, 0.2f, zscale);
+        transform.position = new Vector3(prev.transform.position.x, transform.position.y, transform.position.z);
     }
 
     public void OnZCalled() {
+        GameObject go = GameObject.Find("Manager");
+        GameManager event2 = go.GetComponent<GameManager>();
+
+        GameObject prev = event2.getPrevious();
+
         speed = 0;
         MovingZ mov = GetComponent<MovingZ>();
 
         float newz = transform.position.z / 2;
 
         float zscale = 4 - Math.Abs(transform.position.z);
-        transform.position = new Vector3(0, transform.position.y, newz);
-        transform.localScale = new Vector3(4f, 0.2f, zscale);
+        transform.position = new Vector3(transform.position.x, transform.position.y, newz);
+        transform.localScale = new Vector3(transform.localScale.x, 0.2f, zscale);
 
 
-        GameObject go = GameObject.Find("Manager");
-        GameManager event2 = go.GetComponent<GameManager>();
+        
         event2.onSPressed -= OnZCalled;
         mov.enabled = false;
     }
