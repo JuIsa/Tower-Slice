@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public Transform spawnx;
     public Transform spawnz;
     public static Transform _previous;
+    public GameObject background;
     public Color _color;
     
     private Transform _temp;
@@ -19,9 +20,11 @@ public class GameManager : MonoBehaviour
     public static bool isAxisX = true;
     private float y;
     private bool first = true;
-    private float colorSpeed = 0.3f;
+    private float colorSpeed = 0.1f;
 
     private Gradient _gradientC;
+
+    private MeshRenderer mr;
 
     public event onSPresed onSPressed;
     public delegate void onSPresed();
@@ -33,6 +36,7 @@ public class GameManager : MonoBehaviour
         event2.onSPressed += spwn;
         GenerateGradualColors();
         _previous = GameObject.Find("Base").transform;
+        mr = background.GetComponent<MeshRenderer>();
     }
 
     
@@ -56,6 +60,7 @@ public class GameManager : MonoBehaviour
             Debug.Log(_color);
             //               _current.transform.position = Vector3.Lerp(coord, new Vector3(-4, y, 0), 0.2f);
             isAxisX = false;
+           // mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
            
 
         }
@@ -69,6 +74,7 @@ public class GameManager : MonoBehaviour
             Debug.Log(_color);
             //_current.transform.position = Vector3.Lerp(_current.transform.position, new Vector3(0, y, -4), 0.1f);
             isAxisX = true;
+            //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
         }
         
         y += 0.2f;
@@ -84,7 +90,8 @@ public class GameManager : MonoBehaviour
 
         m.material.color = _gradientC.Evaluate(y * colorSpeed);
         _color = _gradientC.Evaluate(y * colorSpeed);
-        //               _current.transform.position = Vector3.Lerp(coord, new Vector3(-4, y, 0), 0.2f);
+        //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
+        //               
         isAxisX = false;
         y += 0.2f;
 
