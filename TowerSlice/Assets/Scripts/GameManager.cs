@@ -38,12 +38,14 @@ public class GameManager : MonoBehaviour
     public delegate void onSPresed();
     void Start()
     {
+        _previous = GameObject.Find("Base");
+       
         StartCoroutine(spawnPrefs());
         y = spawnx.position.y;
         GameManager event2 = GetComponent<GameManager>();
         event2.onSPressed += spwn;
         GenerateGradualColorsFromPublic();
-        _previous = GameObject.Find("Base");
+        
         mr = background.GetComponent<MeshRenderer>();
     }
 
@@ -63,7 +65,7 @@ public class GameManager : MonoBehaviour
             
             _current =  Instantiate(prefabX, coord, Quaternion.identity);
             MeshRenderer m = _current.GetComponent<MeshRenderer>();
-     
+            _current.name = "CubeX" + counter;
             m.material.color = _gradientC.Evaluate(y * colorSpeed);
             _color1 = _gradientC.Evaluate(y * colorSpeed);
            // Debug.Log(_color1);
@@ -77,7 +79,7 @@ public class GameManager : MonoBehaviour
             Vector3 coord = new Vector3(0, y, spawnz.position.z);
             _current = Instantiate(prefabZ, coord, Quaternion.identity);
             MeshRenderer m = _current.GetComponent<MeshRenderer>();
-           
+            _current.name = "CubeZ" + counter;
             m.material.color = _gradientC.Evaluate(y * colorSpeed);
             _color1 = _gradientC.Evaluate(y * colorSpeed);
             //Debug.Log(_color1);
@@ -85,8 +87,8 @@ public class GameManager : MonoBehaviour
             isAxisX = true;
             //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
         }
+        
 
-        _current.name = "Cube" + counter;
         counter++;
 
         
@@ -100,7 +102,7 @@ public class GameManager : MonoBehaviour
         Quaternion rot = Quaternion.Euler(0, 0, 0);
         _current = Instantiate(prefabX, coord, rot);
         MeshRenderer m = _current.GetComponent<MeshRenderer>();
-        _current.name = "Cube"+counter;
+        _current.name = "CubeX"+counter;
         counter++;
         m.material.color = _gradientC.Evaluate(y * colorSpeed);
         _color1 = _gradientC.Evaluate(y * colorSpeed);
@@ -172,7 +174,7 @@ public class GameManager : MonoBehaviour
         GradientColorKey[] colors = new GradientColorKey[size];
         GradientAlphaKey[] alphas = new GradientAlphaKey[size];
         for(int i = 0; i < size; i++) {
-            Debug.Log(_colors[i]);
+        //    Debug.Log(_colors[i]);
             colors[i].color = _colors[i];
             colors[i].time = (float)i / (float)size;
             alphas[i].alpha = 1;
