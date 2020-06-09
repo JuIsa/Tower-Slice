@@ -31,9 +31,32 @@ public class MovingZ : MonoBehaviour {
         MovingZ mov = GetComponent<MovingZ>();
 
         //float newz = transform.position.z / 2;
-        float newz = transform.position.z / (prev.transform.position.z + prev.transform.localScale.z / 2);
+        //float newz = transform.position.z / (prev.transform.position.z + prev.transform.localScale.z / 2);
+        float z = 0;
+        float temp = 0;
+        float newz = 0;
+       
+        float zscale = 0;
+        if (transform.position.z > prev.transform.position.z) {
+            z = prev.transform.position.z + (prev.transform.localScale.z / 2f);
+            temp = transform.position.z - transform.localScale.z / 2;
+            newz = (z + temp) / 2;
 
-        float zscale = 4 - Math.Abs(transform.position.z);
+            zscale = Math.Abs((z - newz) * 2);
+        }
+        else {
+            z = prev.transform.position.z - (prev.transform.localScale.z / 2f);
+            temp = transform.position.z + transform.localScale.z / 2;
+            newz = (z + temp) / 2;
+
+            zscale = Math.Abs((-z + newz) * 2);
+        }
+        print(transform.position.z);
+        print(z);
+        print(temp);
+        print(newz);
+        print(zscale);
+        //float zscale = 4 - Math.Abs(transform.position.z);
         transform.position = new Vector3(transform.position.x, transform.position.y, newz);
         transform.localScale = new Vector3(transform.localScale.x, 0.2f, zscale);
 

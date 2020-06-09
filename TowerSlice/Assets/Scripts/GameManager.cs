@@ -87,8 +87,8 @@ public class GameManager : MonoBehaviour
             isAxisX = true;
             //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
         }
-        
 
+        print(_current.name);
         counter++;
 
         

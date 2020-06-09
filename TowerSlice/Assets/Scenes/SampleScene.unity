@@ -153,6 +153,7 @@ MonoBehaviour:
   prefabZ: {fileID: 906848932314024971, guid: f3a329347b8d2094d95d73ee09c38178, type: 3}
   spawnx: {fileID: 2111182626}
   spawnz: {fileID: 2041135411}
+  _previous: {fileID: 0}
   background: {fileID: 948754397}
   _color1: {r: 0.2627451, g: 0.9019608, b: 0.60784316, a: 0}
   _color2: {r: 0.34901962, g: 0.90196085, b: 0.2627451, a: 1}
@@ -256,7 +257,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.5e-44, y: 0, z: 1, w: 0}
+  m_BoundingSphereOverride: {x: 1.3e-44, y: 0, z: 1, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
