@@ -9,6 +9,7 @@ public class MovingX : MonoBehaviour
 {
     private float speed = 2.1f;
     private GameObject prev;
+  
     private void Start() {
         GameObject go = GameObject.Find("Manager");
         GameManager event2 = go.GetComponent<GameManager>();
@@ -40,6 +41,8 @@ public class MovingX : MonoBehaviour
             newx = (x + temp) / 2;
 
             xscale = Math.Abs((x - newx) * 2);
+
+            
         }
         else {
             x = prev.transform.position.x - (prev.transform.localScale.x / 2f);

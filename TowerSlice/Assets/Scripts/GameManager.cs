@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class GameManager : MonoBehaviour
     public Color[] _colors;
     private Transform _temp;
     private GameObject _current;
+
+    [Header("Button")]
+    public Button btnStart;
    
     public static bool isAxisX = true;
     private float y;
@@ -40,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
         _previous = GameObject.Find("Base");
        
-        StartCoroutine(spawnPrefs());
+        //StartCoroutine(spawnPrefs());
         y = spawnx.position.y;
         GameManager event2 = GetComponent<GameManager>();
         event2.onSPressed += spwn;
@@ -95,8 +99,11 @@ public class GameManager : MonoBehaviour
         y += 0.2f;
     }
 
+    public void callStartCoroutine() {
+        StartCoroutine(spawnPrefs());
+    }
     private IEnumerator spawnPrefs() {
-        
+        btnStart.gameObject.SetActive(false);
         yield return new WaitForSeconds(1f);
         Vector3 coord = new Vector3(spawnx.position.x, y, 0);
         Quaternion rot = Quaternion.Euler(0, 0, 0);
