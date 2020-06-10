@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
+
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Button")]
     public Button btnStart;
+    public Button restart;
    
     public static bool isAxisX = true;
     private float y;
@@ -34,12 +35,18 @@ public class GameManager : MonoBehaviour
     private float colorSpeed = 0.1f;
     private int counter = 0;
 
+    private GameObject copyx;
+    private GameObject copyz;
+    private List<GameObject> list = new List<GameObject>();
+
     private Gradient _gradientC;
 
     private MeshRenderer mr;
 
     public event onSPresed onSPressed;
     public delegate void onSPresed();
+    public event onRestart onRestarted;
+    public delegate void onRestart();
     void Start()
     {
         _previous = GameObject.Find("Base");
@@ -51,6 +58,8 @@ public class GameManager : MonoBehaviour
         GenerateGradualColorsFromPublic();
         
         mr = background.GetComponent<MeshRenderer>();
+        copyx = prefabX;
+        copyz = prefabZ;
     }
 
     
@@ -62,12 +71,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void OnScreenTouched() {
+        //technically just a hige button;
+        onSPressed?.Invoke();
+    }
+
     public void spwn() {
         _previous = _current;
         if (isAxisX) {
             Vector3 coord = new Vector3(spawnx.position.x, y, 0);
             
-            _current =  Instantiate(prefabX, coord, Quaternion.identity);
+            _current = (GameObject)Instantiate(copyx, coord, Quaternion.identity) as GameObject;
             MeshRenderer m = _current.GetComponent<MeshRenderer>();
             _current.name = "CubeX" + counter;
             m.material.color = _gradientC.Evaluate(y * colorSpeed);
@@ -75,13 +89,15 @@ public class GameManager : MonoBehaviour
            // Debug.Log(_color1);
             //               _current.transform.position = Vector3.Lerp(coord, new Vector3(-4, y, 0), 0.2f);
             isAxisX = false;
-           // mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
+            // mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
+
+            list.Add(_current);
            
 
         }
         else {
             Vector3 coord = new Vector3(0, y, spawnz.position.z);
-            _current = Instantiate(prefabZ, coord, Quaternion.identity);
+            _current = (GameObject)Instantiate(copyz, coord, Quaternion.identity) as GameObject;
             MeshRenderer m = _current.GetComponent<MeshRenderer>();
             _current.name = "CubeZ" + counter;
             m.material.color = _gradientC.Evaluate(y * colorSpeed);
@@ -90,6 +106,7 @@ public class GameManager : MonoBehaviour
             //_current.transform.position = Vector3.Lerp(_current.transform.position, new Vector3(0, y, -4), 0.1f);
             isAxisX = true;
             //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);
+            list.Add(_current);
         }
 
         print(_current.name);
@@ -107,7 +124,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Vector3 coord = new Vector3(spawnx.position.x, y, 0);
         Quaternion rot = Quaternion.Euler(0, 0, 0);
-        _current = Instantiate(prefabX, coord, rot);
+        _current = (GameObject)Instantiate(copyx, coord, rot) as GameObject;
+        list.Add(_current);
         MeshRenderer m = _current.GetComponent<MeshRenderer>();
         _current.name = "CubeX"+counter;
         counter++;
@@ -117,7 +135,7 @@ public class GameManager : MonoBehaviour
         //mr.material.color = _gradientC.Evaluate(y * colorSpeed * 0.2f);               
         isAxisX = false;
         y += 0.2f;
-
+        yield break;
         //change previous cube
 
 
@@ -199,4 +217,28 @@ public class GameManager : MonoBehaviour
     public GameObject getPrevious() {
         return _previous;
     }
+
+    public void Restart() {
+        copyx = prefabX;
+        copyz = prefabZ;
+        restart.transform.position= new Vector3(2400f, 387f, 0f);
+        //GameObject[] all = GameObject.FindGameObjectsWithTag("Player");
+        foreach(GameObject one in list) {
+            one.SetActive(false);
+           // Destroy(one);
+        }
+
+        GameObject camera = GameObject.Find("Cam");
+        camera.transform.position = new Vector3(-3.2f, 2.8f,-4.54f);
+        
+        onRestarted?.Invoke();
+
+        Time.timeScale = 1;
+        callStartCoroutine();
+        y = spawnx.position.y;
+        _previous = GameObject.Find("Base");
+        
+    }
+
+   
 }

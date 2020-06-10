@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MovingX : MonoBehaviour
 {
@@ -28,7 +25,14 @@ public class MovingX : MonoBehaviour
         GameObject go = GameObject.Find("Manager");
         GameManager event2 = go.GetComponent<GameManager>();
         MovingX mov = GetComponent<MovingX>();
-
+        //check if prefab is above previous
+        float current = transform.position.x - (transform.localScale.x / 2f);
+        float previous = prev.transform.position.x + (prev.transform.localScale.x / 2f);
+        if (current > (previous)) {
+            Time.timeScale = 0f;
+            Button restart = GameObject.Find("restart").GetComponent<Button>();
+            restart.transform.position = new Vector3(722f, 387f, 0f);
+        }
         //float newx = transform.position.x / 2;
         //float newx = transform.position.x / (prev.transform.position.x + prev.transform.localScale.x/2);
         float x = 0;
@@ -69,7 +73,18 @@ public class MovingX : MonoBehaviour
 
     void Update()
     {
+        if (gameObject == null) {
+            Destroy(gameObject);
+        }
         transform.position += Vector3.left* Time.deltaTime*speed;
-        
+        if (transform.position.x < prev.transform.position.x) {
+            float current = transform.position.x + (transform.localScale.x / 2f);
+            float previous = prev.transform.position.x - (prev.transform.localScale.x / 2f);
+            if (current < (previous)) {
+                Time.timeScale = 0f;
+                Button restart = GameObject.Find("restart").GetComponent<Button>();
+                restart.transform.position = new Vector3(722f, 387f, 0f);
+            }
+        }
     }
 }

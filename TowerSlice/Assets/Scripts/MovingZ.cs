@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MovingZ : MonoBehaviour {
     
@@ -27,9 +24,15 @@ public class MovingZ : MonoBehaviour {
         speed = 0;
         GameObject go = GameObject.Find("Manager");
         GameManager event2 = go.GetComponent<GameManager>();
-
         MovingZ mov = GetComponent<MovingZ>();
-
+        //check if prefab is above previous
+        float current = (transform.position.z - (transform.localScale.z / 2f));
+        float previous = prev.transform.position.z + (prev.transform.localScale.z / 2f);
+        if (current > previous) {
+            Time.timeScale = 0f;
+            Button restart = GameObject.Find("restart").GetComponent<Button>();
+            restart.transform.position = new Vector3(722f, 387f, 0f);
+        }
         //float newz = transform.position.z / 2;
         //float newz = transform.position.z / (prev.transform.position.z + prev.transform.localScale.z / 2);
         float z = 0;
@@ -37,6 +40,7 @@ public class MovingZ : MonoBehaviour {
         float newz = 0;
        
         float zscale = 0;
+        
         if (transform.position.z > prev.transform.position.z) {
             z = prev.transform.position.z + (prev.transform.localScale.z / 2f);
             temp = transform.position.z - transform.localScale.z / 2;
@@ -67,6 +71,19 @@ public class MovingZ : MonoBehaviour {
     }
 
     void Update() {
+        if (gameObject == null) {
+            Destroy(gameObject);
+        }
         transform.position += Vector3.back * Time.deltaTime * speed;
+        if (transform.position.z < prev.transform.position.z) {
+            float current = (transform.position.z + (transform.localScale.z / 2f));
+            float previous = prev.transform.position.z - (prev.transform.localScale.z / 2f);
+            if (current < previous){
+                Time.timeScale = 0f;
+                Button restart = GameObject.Find("restart").GetComponent<Button>();
+                restart.transform.position = new Vector3(722f, 387f, 0f);
+            }
+        }
+        
     }
 }

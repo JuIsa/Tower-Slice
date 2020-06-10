@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +11,7 @@ public class TextManager : MonoBehaviour
         GameObject go = GameObject.Find("Manager");
         GameManager eventS = go.GetComponent<GameManager>();
         eventS.onSPressed += UpdateScore;
-
+        eventS.onRestarted += ResetScore;
         _text = GetComponent<Text>();
     }
 
@@ -20,5 +19,9 @@ public class TextManager : MonoBehaviour
         _text.enabled = true;
         score++;
         _text.text = score.ToString();
+    }
+    public void ResetScore() {
+        score = 0;
+        _text.text = score.ToString(); 
     }
 }
